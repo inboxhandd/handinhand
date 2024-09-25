@@ -82,7 +82,7 @@ def login():
 
 # Workflow Form after Login
 def workflow():
-    st.title("Workflow: Upload Food and System Condition")
+    st.title("Workflow: Upload Food and Health Condition")
 
     # Time selection
     time_of_day = st.selectbox("Select Time of Day", ["Morning", "Afternoon", "Evening", "Night"])
@@ -90,10 +90,10 @@ def workflow():
     # Upload voice recording about food intake
     uploaded_voice = st.file_uploader("Upload voice recording related to food intake", type=["wav", "mp3", "ogg", "m4a"])
 
-    # Upload system condition details (e.g., a text file or a recorded message)
-    uploaded_condition = st.file_uploader("Upload file with system condition", type=["txt", "docx", "wav", "mp3", "ogg", "m4a"])
+    # Upload Health condition details (e.g., a text file or a recorded message)
+    uploaded_condition = st.file_uploader("Upload file with Health condition", type=["txt", "docx", "wav", "mp3", "ogg", "m4a"])
 
-    # Store text to edit for both food and system condition
+    # Store text to edit for both food and Health condition
     extracted_text = None
     extracted_condition_text = None
 
@@ -107,13 +107,13 @@ def workflow():
         food_text = st.text_area("Edit extracted text for food intake:", value=extracted_text)
 
     if uploaded_condition is not None:
-        # Convert the audio file to WAV and extract text for system condition
+        # Convert the audio file to WAV and extract text for Health condition
         condition_audio_path = convert_to_wav(uploaded_condition)
         extracted_condition_text = speech_to_text(condition_audio_path)
 
-        st.subheader("Extracted Text from Voice Recording (in Hindi) - System Condition:")
-        # Editable text area for system condition
-        condition_text = st.text_area("Edit extracted text for system condition:", value=extracted_condition_text)
+        st.subheader("Extracted Text from Voice Recording (in Hindi) - Health Condition:")
+        # Editable text area for Health condition
+        condition_text = st.text_area("Edit extracted text for Health condition:", value=extracted_condition_text)
 
     if st.button("Submit"):
         if uploaded_voice is not None and uploaded_condition is not None:
@@ -135,10 +135,10 @@ def workflow():
             st.success(f"Files uploaded successfully! ({voice_filename}, {condition_filename})")
             st.subheader("Final Submitted Text for Food Intake:")
             st.write(food_text)
-            st.subheader("Final Submitted Text for System Condition:")
+            st.subheader("Final Submitted Text for Health Condition:")
             st.write(condition_text)
         else:
-            st.error("Please upload both the voice recording and system condition files.")
+            st.error("Please upload both the voice recording and Health condition files.")
 
 # Main function to handle login and workflow
 def main():
