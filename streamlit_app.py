@@ -94,12 +94,20 @@ def workflow():
     uploaded_condition = st.file_uploader("Upload file with system condition", type=["txt", "docx", "wav", "mp3", "ogg", "m4a"])
 
     if uploaded_voice is not None:
-        # Convert the audio file to WAV and extract text
+        # Convert the audio file to WAV and extract text for food intake
         audio_path = convert_to_wav(uploaded_voice)
         extracted_text = speech_to_text(audio_path)
 
-        st.subheader("Extracted Text from Voice Recording (in Hindi):")
+        st.subheader("Extracted Text from Voice Recording (in Hindi) - Food Intake:")
         st.write(extracted_text)
+    
+    if uploaded_condition is not None:
+        # Convert the audio file to WAV and extract text for system condition
+        condition_audio_path = convert_to_wav(uploaded_condition)
+        extracted_condition_text = speech_to_text(condition_audio_path)
+
+        st.subheader("Extracted Text from Voice Recording (in Hindi) - System Condition:")
+        st.write(extracted_condition_text)
     
     if st.button("Submit"):
         if uploaded_voice is not None and uploaded_condition is not None:
