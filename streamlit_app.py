@@ -76,7 +76,7 @@ def login():
         if validate_login(int(mobile), int(password)):
             st.session_state['authenticated'] = True
             st.success("Login successful!")
-            st.rerun()
+            st.experimental_rerun()
         else:
             st.error("Invalid mobile number or password")
 
@@ -93,22 +93,28 @@ def workflow():
     # Upload system condition details (e.g., a text file or a recorded message)
     uploaded_condition = st.file_uploader("Upload file with system condition", type=["txt", "docx", "wav", "mp3", "ogg", "m4a"])
 
+    # Store text to edit for both food and system condition
+    extracted_text = None
+    extracted_condition_text = None
+
     if uploaded_voice is not None:
         # Convert the audio file to WAV and extract text for food intake
         audio_path = convert_to_wav(uploaded_voice)
         extracted_text = speech_to_text(audio_path)
 
         st.subheader("Extracted Text from Voice Recording (in Hindi) - Food Intake:")
-        st.write(extracted_text)
-    
+        # Editable text area for food intake
+        food_text = st.text_area("Edit extracted text for food intake:", value=extracted_text)
+
     if uploaded_condition is not None:
         # Convert the audio file to WAV and extract text for system condition
         condition_audio_path = convert_to_wav(uploaded_condition)
         extracted_condition_text = speech_to_text(condition_audio_path)
 
         st.subheader("Extracted Text from Voice Recording (in Hindi) - System Condition:")
-        st.write(extracted_condition_text)
-    
+        # Editable text area for system condition
+        condition_text = st.text_area("Edit extracted text for system condition:", value=extracted_condition_text)
+
     if st.button("Submit"):
         if uploaded_voice is not None and uploaded_condition is not None:
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -125,7 +131,12 @@ def workflow():
             with open(condition_file_path, "wb") as f:
                 f.write(uploaded_condition.getbuffer())
 
+            # Show success message and the final edited text
             st.success(f"Files uploaded successfully! ({voice_filename}, {condition_filename})")
+            st.subheader("Final Submitted Text for Food Intake:")
+            st.write(food_text)
+            st.subheader("Final Submitted Text for System Condition:")
+            st.write(condition_text)
         else:
             st.error("Please upload both the voice recording and system condition files.")
 
