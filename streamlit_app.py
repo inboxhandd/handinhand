@@ -76,7 +76,7 @@ def login():
         if validate_login(int(mobile), int(password)):
             st.session_state['authenticated'] = True
             st.success("Login successful!")
-            st.experimental_rerun()
+            st.rerun()
         else:
             st.error("Invalid mobile number or password")
 
